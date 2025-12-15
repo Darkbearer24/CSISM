@@ -583,6 +583,34 @@
             min-height: 140px;
         }
 
+        /* Select: improved visibility */
+        .enquiry-dropdown {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid var(--color-accent-light);
+            border-radius: 6px;
+            font-family: var(--font-sans);
+            font-size: 16px;
+            background-color: #FFFFFF;
+            color: var(--color-primary);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+
+        .enquiry-dropdown:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.18);
+            background-color: #FFFFFF;
+            color: var(--color-primary);
+        }
+
+        .enquiry-dropdown option {
+            color: var(--color-primary);
+            background-color: #FFFFFF;
+            font-size: 16px;
+        }
+
         .submit-button {
             background-color: var(--color-accent-light);
             color: var(--color-primary);
@@ -799,7 +827,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#expertise">Expertise</a></li>
                 <li><a href="#ncism-laws">NCISM Laws</a></li>
-                <li><a href="#faq">FAQ</a></li>
+                <!-- <li><a href="#faq">FAQ</a></li> -->
                 <li><a href="#contact">Contact</a></li>
                 <li><select id="languageToggle" onchange="changeLanguage(this.value)" style="padding: 8px 12px; border-radius: 4px; border: 1px solid var(--color-gray-200); background: var(--color-white); cursor: pointer; font-size: 14px;">
                     <option value="en">English</option>
@@ -844,7 +872,7 @@
             <p><strong>NCISM Anti-Bribery Policy:</strong> The National Commission for Indian System of Medicine has strict anti-bribery policies. Any individuals or institutions engaging in bribery face severe legal consequences.</p>
             <div class="disclaimer-buttons">
                 <button class="btn-decline" onclick="closeAntiBriberyModal()" style="flex: 1;">Decline</button>
-                <button class="btn-accept" onclick="closeAntiBriberyModal()" style="flex: 1;">I Agree & Confirm</button>
+                <button class="btn-accept" onclick="confirmAntiBribery()" style="flex: 1;">I Agree & Confirm</button>
             </div>
         </div>
     </div>
@@ -852,8 +880,8 @@
     <!-- HERO SECTION -->
     <section class="hero">
         <div class="hero-container">
-            <h1>Professional Guidance for <span class="highlight">ISM College Establishment</span></h1>
-            <p>Comprehensive regulatory compliance and institutional development expertise for Ayurvedic, Unani, and Siddha medical colleges</p>
+            <h1>Professional Guidance for <span class="highlight">AYUSH Medical Colleges</span></h1>
+            <p>As per the policies and Rules and Regulations laid by the NCISM, Ministry of Ayush and other Regulatory Bodies</p>
             <button class="cta-button" onclick="scrollToContact()">Start Your Enquiry</button>
         </div>
     </section>
@@ -863,7 +891,7 @@
         <div class="about-container">
             <div class="about-text">
                 <h2>Why Choose <strong>CSISM</strong></h2>
-                <p><strong>Kashish Gupta</strong>, a consultancy expert with extensive experience in Indian System of Medicine regulatory frameworks and institutional development.</p>
+                <p>A consultancy expert with extensive experience in Indian System of Medicine regulatory frameworks and institutional development.</p>
                 <p>With years of deep insider knowledge of <strong>NCISM</strong> (National Commission for Indian System of Medicine) regulations and procedures, we provide simplified, transparent guidance to institutions seeking to establish or enhance their ISM colleges.</p>
                 <p>Our approach combines <strong>regulatory compliance</strong> with practical implementation strategies, ensuring your institution meets all statutory requirements efficiently.</p>
             </div>
@@ -898,47 +926,13 @@
                 </div>
                 <div class="expertise-card">
                     <h3>Specialized Consulting</h3>
-                    <p>Specialized advisory for unique queries related to ISM college establishment and regulatory matters not covered elsewhere.</p>
+                    <p>Expert advisory for complex and exceptional regulatory matters concerning AYUSH medical colleges, including court cases, new college establishment, penalties, and NCISM–Ministry of AYUSH compliance issues.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CONSULTANT SECTION -->
-    <section class="about">
-        <div class="about-container" style="grid-template-columns: 1fr;">
-            <div>
-                <h2>About <strong>Kashish Gupta</strong></h2>
-                <p>Consultancy expert with extensive experience in Indian System of Medicine regulatory frameworks and institutional development.</p>
-                
-                <div class="consultant-card fade-in-up">
-                    <h3>Professional Background</h3>
-                    <p>With years of deep insider knowledge of NCISM regulations and procedures, Kashish provides simplified, transparent guidance to institutions seeking to establish or enhance their ISM colleges. Our approach combines regulatory compliance with practical implementation strategies.</p>
-                    
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <strong>📧 Email</strong>
-                            <a href="mailto:kashish@csism.com" style="color: var(--color-accent); text-decoration: none;">kashish@csism.com</a>
-                        </div>
-                        <div class="contact-method">
-                            <strong>📱 WhatsApp</strong>
-                            <a href="https://wa.me/919999999999" style="color: var(--color-accent); text-decoration: none;">+91 99999 99999</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="credentials fade-in-up delay-1">
-                    <strong>🏆 Professional Credentials</strong>
-                    <ul style="margin-left: 20px; margin-top: 15px; line-height: 2;">
-                        <li><strong>Verified Expertise:</strong> Backed by professional recommendation letters from industry experts and regulatory bodies</li>
-                        <li><strong>Attorney-Client Privilege:</strong> All consultations protected under attorney-client privilege and NDA</li>
-                        <li><strong>Regulatory Knowledge:</strong> Deep insider understanding of NCISM regulations and compliance requirements</li>
-                        <li><strong>Institutional Development:</strong> Expertise in college establishment, infrastructure planning, and operational excellence</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- NCISM LAWS SECTION -->
     <section class="ncism-section" id="ncism-laws">
@@ -963,71 +957,6 @@
     </section>
 
     <!-- FAQ SECTION -->
-    <section class="faq-section" id="faq">
-        <div class="faq-container">
-            <h2 class="faq-title">Frequently Asked <strong>Questions</strong></h2>
-            
-            <div class="faq-item fade-in-up" onclick="toggleFAQ(this)">
-                <div class="faq-question">
-                    <span>What is NCISM and why is it important?</span>
-                    <span style="font-size: 20px;">+</span>
-                </div>
-                <div class="faq-answer">
-                    NCISM (National Commission for Indian System of Medicine) is the apex regulatory body in India that oversees the education, practice, and regulation of Indian Systems of Medicine including Ayurveda, Unani, Siddha, and Homeopathy. It establishes standards for colleges, curricula, and professional conduct.
-                </div>
-            </div>
-
-            <div class="faq-item fade-in-up delay-1" onclick="toggleFAQ(this)">
-                <div class="faq-question">
-                    <span>How long does ISM college establishment typically take?</span>
-                    <span style="font-size: 20px;">+</span>
-                </div>
-                <div class="faq-answer">
-                    The timeline varies based on institutional readiness, infrastructure development, and regulatory approvals. With proper planning and our guidance, most institutions can expect a 18-24 month process from initial planning to provisional affiliation.
-                </div>
-            </div>
-
-            <div class="faq-item fade-in-up delay-2" onclick="toggleFAQ(this)">
-                <div class="faq-question">
-                    <span>What are the minimum infrastructure requirements?</span>
-                    <span style="font-size: 20px;">+</span>
-                </div>
-                <div class="faq-answer">
-                    NCISM mandates specific requirements including classroom spaces, laboratory facilities, library resources, clinical departments, hostel facilities, and administrative offices. The exact specifications depend on the program level and system of medicine offered.
-                </div>
-            </div>
-
-            <div class="faq-item fade-in-up delay-3" onclick="toggleFAQ(this)">
-                <div class="faq-question">
-                    <span>What qualifications are required for faculty members?</span>
-                    <span style="font-size: 20px;">+</span>
-                </div>
-                <div class="faq-answer">
-                    Faculty must hold recognized degrees in their respective fields of ISM, relevant postgraduate qualifications, and professional experience. NCISM maintains a detailed teacher code system that specifies minimum qualifications for each position.
-                </div>
-            </div>
-
-            <div class="faq-item fade-in-up delay-4" onclick="toggleFAQ(this)">
-                <div class="faq-question">
-                    <span>How does your consultancy ensure compliance?</span>
-                    <span style="font-size: 20px;">+</span>
-                </div>
-                <div class="faq-answer">
-                    We conduct comprehensive compliance audits, document verification, infrastructure assessment, and faculty qualification checks. Our systematic approach ensures your institution meets all NCISM standards before formal submissions.
-                </div>
-            </div>
-
-            <div class="faq-item fade-in-up delay-5" onclick="toggleFAQ(this)">
-                <div class="faq-question">
-                    <span>Is this a government website or private consultancy?</span>
-                    <span style="font-size: 20px;">+</span>
-                </div>
-                <div class="faq-answer">
-                    CSISM is a private consultancy led by professionals with extensive expertise in ISM regulatory frameworks. We are independent consultants, not affiliated with NCISM or any government body. Our guidance is based on professional expertise and practical experience.
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- TRUST SECTION -->
     <section class="trust-section">
@@ -1058,18 +987,28 @@
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="collegeName">Name of AYUSH College</label>
+                    <input type="text" id="collegeName" name="collegeName" required>
+                </div>
+                <div class="form-group">
                     <label for="inquiryType">Inquiry Type</label>
                     <select id="inquiryType" name="inquiryType" class="enquiry-dropdown" required>
                         <option value="">Select Inquiry Type</option>
-                        <option value="college-establishment">College Establishment</option>
-                        <option value="compliance-check">Compliance Verification</option>
-                        <option value="faculty-structure">Faculty & Academic Structure</option>
-                        <option value="infrastructure">Infrastructure Planning</option>
-                        <option value="document-support">Document Preparation</option>
-                        <option value="other">Other</option>
+                        <option value="teacher-code">TEACHER CODE</option>
+                        <option value="running-colleges">ALREADY ESTABLISHED/RUNNING COLLEGES</option>
+                        <option value="new-ayush-college">ESTABLISHMENT OF NEW AYUSH COLLEGE</option>
+                        <option value="court-matters">COURT MATTERS</option>
+                        <option value="appealing">MATTER RELATED TO APPEALING</option>
+                        <option value="monetary-penalty">MATTER RELATED TO MONETARY PENALTY</option>
+                        <option value="regularization-of-batch">MATTER RELATED TO REGULARIZATION OF BATCH</option>
                     </select>
                 </div>
                 <button type="submit" class="submit-button">Submit Inquiry</button>
+                <div id="enquiryStatus" aria-live="polite" style="margin-top:12px;"></div>
             </form>
         </div>
     </section>
@@ -1176,6 +1115,8 @@
             
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const collegeName = document.getElementById('collegeName').value;
             const inquiryType = document.getElementById('inquiryType').value;
 
             // Show anti-bribery modal before processing
@@ -1186,6 +1127,8 @@
             window.pendingFormData = {
                 name: name,
                 email: email,
+                phone: phone,
+                collegeName: collegeName,
                 inquiryType: inquiryType,
                 form: event.target
             };
@@ -1194,18 +1137,51 @@
         function closeAntiBriberyModal() {
             const antiBriberyModal = document.getElementById('antiBriberyModal');
             antiBriberyModal.classList.remove('show');
-            
+        }
+
+        function confirmAntiBribery() {
+            closeAntiBriberyModal();
             if (window.pendingFormData) {
-                const { name, email, inquiryType, form } = window.pendingFormData;
-                
-                // Email and WhatsApp contact info
-                const emailSubject = `New Inquiry: ${inquiryType} from ${name}`;
-                const mailtoLink = `mailto:kashish@csism.com?subject=${encodeURIComponent(emailSubject)}`;
-                const whatsappLink = `https://wa.me/919999999999?text=Hello%20Kashish,%20I%20would%20like%20to%20inquire%20about%20${encodeURIComponent(inquiryType)}`;
-                
-                alert(`Thank you for your inquiry! Kashish Gupta will contact you via:\n\n📧 Email: kashish@csism.com\n📱 WhatsApp: +91 99999 99999`);
-                
-                form.reset();
+                submitEnquiry(window.pendingFormData);
+            }
+        }
+
+        async function submitEnquiry(data) {
+            const statusEl = document.getElementById('enquiryStatus');
+            const submitBtn = document.querySelector('button[type=\"submit\"]');
+            statusEl.style.color = '#505050';
+            statusEl.textContent = 'Submitting enquiry...';
+            submitBtn.disabled = true;
+            try {
+                const res = await fetch('http://127.0.0.1:5000/api/enquiry', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: data.name,
+                        email: data.email,
+                        phone: data.phone,
+                        collegeName: data.collegeName,
+                        inquiryType: data.inquiryType
+                    })
+                });
+                const json = await res.json().catch(() => ({}));
+                if (res.ok && json && json.success) {
+                    statusEl.style.color = '#2E7D32';
+                    statusEl.textContent = 'Your enquiry was submitted successfully.';
+                    data.form.reset();
+                    statusEl.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    statusEl.style.color = '#D32F2F';
+                    const msg = (json && json.error) ? json.error : 'Submission failed';
+                    statusEl.textContent = `Error: ${msg}`;
+                    statusEl.scrollIntoView({ behavior: 'smooth' });
+                }
+            } catch (e) {
+                statusEl.style.color = '#D32F2F';
+                statusEl.textContent = 'Network error while submitting the enquiry.';
+                statusEl.scrollIntoView({ behavior: 'smooth' });
+            } finally {
+                submitBtn.disabled = false;
                 window.pendingFormData = null;
             }
         }
