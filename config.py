@@ -1,11 +1,7 @@
-# SMTP configuration (GoDaddy Titan Email)
-
-SMTP_SERVER = "smtpout.secureserver.net"
-SMTP_PORT = 587
-
-# Sender email MUST match SMTP_USERNAME
-SMTP_USERNAME = "helpdesk@csismconsultancy.com"
-SMTP_PASSWORD = "123BAms**"
-
-SENDER_EMAIL = "helpdesk@csismconsultancy.com"
-RECEIVER_EMAIL = "helpdesk@csismconsultancy.com"
+import os
+SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtpout.secureserver.net")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_USERNAME = os.environ.get("SMTP_USERNAME", "REPLACE_WITH_DOMAIN_EMAIL")
+SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "REPLACE_WITH_EMAIL_PASSWORD")
+SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "REPLACE_WITH_DOMAIN_EMAIL")
+RECEIVER_EMAIL = os.environ.get("RECEIVER_EMAIL", "REPLACE_WITH_RECEIVER_EMAIL")
