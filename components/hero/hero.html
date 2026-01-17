@@ -1,0 +1,25 @@
+<!--
+  Hero Component (BEM, Accessible, Mobile-First)
+  Usage: Place within page body where the hero should appear.
+  Pair with hero.css and hero.js for styles and progressive enhancement.
+-->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__background" aria-hidden="true"></div>
+  <div class="hero__inner">
+    <h1 id="hero-title" class="hero__title">
+      <span class="hero__title-text">One stop</span>
+      <span class="hero__title-highlight">solution</span>
+      <span class="hero__title-text"> for </span>
+      <span class="hero__title-strong">Ayush Medical colleges</span>
+    </h1>
+    <p class="hero__subtitle">
+      india's first legal consultancy service for ayush colleges
+    </p>
+    <a class="hero__cta" href="#contact" aria-label="Request enquiry" onclick="scrollToContact()">
+      Request enquiry
+    </a>
+  </div>
+  <div class="hero__wave" aria-hidden="true"></div>
+  <div class="hero__gradient" aria-hidden="true"></div>
+</section>
+

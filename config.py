@@ -1,7 +1,0 @@
-import os
-SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtpout.secureserver.net")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
-SMTP_USERNAME = os.environ.get("SMTP_USERNAME", "REPLACE_WITH_DOMAIN_EMAIL")
-SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "REPLACE_WITH_EMAIL_PASSWORD")
-SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "REPLACE_WITH_DOMAIN_EMAIL")
-RECEIVER_EMAIL = os.environ.get("RECEIVER_EMAIL", "REPLACE_WITH_RECEIVER_EMAIL")
