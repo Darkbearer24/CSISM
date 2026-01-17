@@ -1,0 +1,39 @@
+<!--
+  Navbar Component (BEM, Accessible, Mobile-First)
+  Usage: Include this markup at the top of your page body.
+  Requirements: Pair with navbar.css and navbar.js for styles and behavior.
+-->
+<nav class="navbar" role="navigation" aria-label="Primary">
+  <div class="navbar__container">
+    <a class="navbar__brand" href="/" aria-label="CSISM home">
+      <img class="navbar__brand-image" src="/static/images/logo-new.png" alt="CSISM Logo">
+      <span class="navbar__brand-text">CSISM</span>
+    </a>
+    <button class="navbar__toggle" aria-label="Open main menu" aria-controls="navbar-menu" aria-expanded="false">
+      <span class="navbar__toggle-bar" aria-hidden="true"></span>
+      <span class="navbar__toggle-bar" aria-hidden="true"></span>
+      <span class="navbar__toggle-bar" aria-hidden="true"></span>
+    </button>
+    <ul class="navbar__menu" id="navbar-menu">
+      <li class="navbar__item">
+        <a class="navbar__link" href="#about">About Us</a>
+      </li>
+      <li class="navbar__item">
+        <a class="navbar__link" href="#services">Services</a>
+      </li>
+      <li class="navbar__item">
+        <a class="navbar__link" href="#about">Why Choose Us?</a>
+      </li>
+      <li class="navbar__item">
+        <a class="navbar__link" href="#ncism-laws">MSR vs MESAR</a>
+      </li>
+      <li class="navbar__item">
+        <a class="navbar__link" href="#contact">Contact</a>
+      </li>
+      <li class="navbar__item navbar__item--cta">
+        <a class="navbar__link navbar__link--cta" href="#contact">Get Started</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
