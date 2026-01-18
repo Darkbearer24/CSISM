@@ -5,7 +5,7 @@ import styles from './index.module.scss';
 const Component = () => {
   return (
     <div className={styles.frame46}>
-      <img src="../image/mkin3p9y-zwz7ubp.png" className={styles.image13} />
+      <img src="../image/mkjh0zg9-utxcnz0.png" className={styles.image13} />
       <div className={styles.ellipse1}>
         <div className={styles.autoWrapper}>
           <p className={styles.oneStopSolutionForAy4}>
