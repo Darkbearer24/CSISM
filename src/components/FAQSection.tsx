@@ -45,8 +45,8 @@ const FAQSection: React.FC = () => {
       <div className="container">
         <h2 className="section-title text-center">Frequently Asked Questions</h2>
         <div className="faq-list">
-          {faqs.map((faq) => (
-            <div key={faq.id} className={`faq-item ${activeId === faq.id ? 'active' : ''}`}>
+          {faqs.map((faq, index) => (
+            <div key={faq.question} className={`faq-item ${activeIndex === index ? 'active' : ''}`}>
               <button
                 className="faq-question"
                 onClick={() => toggleAccordion(faq.id)}
