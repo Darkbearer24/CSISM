@@ -1,0 +1,3 @@
+# Runtime dependencies
+# Standard library smtplib is used.
+# No external dependencies required for basic functionality.

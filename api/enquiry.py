@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import smtplib
 from email.message import EmailMessage
 from http.server import BaseHTTPRequestHandler
@@ -15,11 +16,16 @@ ALLOWED_INQUIRY_TYPES = {
     "general",
 }
 
+# Precompile regex for performance
+# Matches control characters (0-31) EXCEPT \t (9), \n (10), \r (13)
+CONTROL_CHARS_RE = re.compile(r'[\x00-\x08\x0B\x0C\x0E-\x1F]')
+
 def sanitize_text(value: str, max_len: int = 200) -> str:
     if not isinstance(value, str):
         return ""
     v = value.strip()
-    v = "".join(ch for ch in v if ord(ch) >= 32 or ch in "\t\n\r")
+    # Optimized: Use regex to remove control characters
+    v = CONTROL_CHARS_RE.sub('', v)
     return v[:max_len]
 
 def validate(payload: dict):
@@ -47,6 +53,11 @@ def send_email(data: dict):
     smtp_pass = os.getenv("SMTP_PASSWORD", "")
     sender = os.getenv("SENDER_EMAIL", smtp_user or "noreply@example.com")
     receiver = os.getenv("RECEIVER_EMAIL", sender)
+    # Default timeout to 10 seconds to prevent hanging
+    try:
+        timeout = int(os.getenv("SMTP_TIMEOUT", "10"))
+    except (ValueError, TypeError):
+        timeout = 10
 
     subject = "New ISM College Enquiry – CSISM Website"
     body = "\n".join([
@@ -67,7 +78,7 @@ def send_email(data: dict):
     msg["Subject"] = subject
     msg.set_content(body)
 
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
+    with smtplib.SMTP(smtp_server, smtp_port, timeout=timeout) as server:
         server.starttls()
         if smtp_user and smtp_pass:
             server.login(smtp_user, smtp_pass)
@@ -111,4 +122,3 @@ class handler(BaseHTTPRequestHandler):
             return json_response(self, 502, {"success": False, "error": "Unable to send email"})
 
         return json_response(self, 200, {"success": True})
-
