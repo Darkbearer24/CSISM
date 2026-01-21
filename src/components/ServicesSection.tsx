@@ -42,7 +42,7 @@ const ServicesSection: React.FC = () => {
 
         <div className="services-grid">
           {services.map((service) => (
-            <div key={service.id} className="service-card">
+            <div key={service.title} className="service-card">
               <h3 className="service-title">{service.title}</h3>
               <p className="service-description">{service.description}</p>
             </div>
