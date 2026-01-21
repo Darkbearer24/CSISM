@@ -40,7 +40,7 @@ const FAQSection: React.FC = () => {
         <h2 className="section-title text-center">Frequently Asked Questions</h2>
         <div className="faq-list">
           {faqs.map((faq, index) => (
-            <div key={index} className={`faq-item ${activeIndex === index ? 'active' : ''}`}>
+            <div key={faq.question} className={`faq-item ${activeIndex === index ? 'active' : ''}`}>
               <button
                 className="faq-question"
                 onClick={() => toggleAccordion(index)}

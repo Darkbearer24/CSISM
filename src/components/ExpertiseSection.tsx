@@ -24,8 +24,8 @@ const ExpertiseSection: React.FC = () => {
     <section id="expertise" className="expertise-section">
       <div className="container">
         <div className="expertise-grid">
-          {expertiseItems.map((item, index) => (
-            <div key={index} className="expertise-card">
+          {expertiseItems.map((item) => (
+            <div key={item.title} className="expertise-card">
               <h3 className="expertise-title">{item.title}</h3>
               <p className="expertise-description">{item.description}</p>
             </div>
