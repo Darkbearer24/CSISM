@@ -7,6 +7,10 @@ const Header: React.FC = () => {
     setIsNavOpen(!isNavOpen);
   };
 
+  const closeNav = () => {
+    setIsNavOpen(false);
+  };
+
   return (
     <header className="site-header">
       <div className="container header-inner">
@@ -24,12 +28,12 @@ const Header: React.FC = () => {
         </button>
 
         <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`}>
-          <a href="#" onClick={() => setIsNavOpen(false)}>Home</a>
-          <a href="#about" onClick={() => setIsNavOpen(false)}>About</a>
-          <a href="#services" onClick={() => setIsNavOpen(false)}>Services</a>
-          <a href="#expertise" onClick={() => setIsNavOpen(false)}>Expertise</a>
-          <a href="#faq" onClick={() => setIsNavOpen(false)}>FAQ</a>
-          <a href="#contact" className="btn btn-primary" onClick={() => setIsNavOpen(false)}>Contact Us</a>
+          <a href="#" onClick={closeNav}>Home</a>
+          <a href="#about" onClick={closeNav}>About</a>
+          <a href="#services" onClick={closeNav}>Services</a>
+          <a href="#expertise" onClick={closeNav}>Expertise</a>
+          <a href="#faq" onClick={closeNav}>FAQ</a>
+          <a href="#contact" className="btn btn-primary" onClick={closeNav}>Contact Us</a>
 
           <div className="lang-wrapper">
             <select className="lang">
