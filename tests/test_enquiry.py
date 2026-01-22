@@ -17,9 +17,19 @@ class TestEnquiry(unittest.TestCase):
         ok, res = validate({"name": "", "email": "bad"})
         self.assertFalse(ok)
 
+    def setUp(self):
+        # Reset global state before each test
+        import api.enquiry
+        api.enquiry._smtp_client = None
+
     @patch("smtplib.SMTP")
     def test_send_email(self, mock_smtp):
         mock_server = MagicMock()
+        # The new implementation doesn't use context manager (with stmt),
+        # so it uses mock_smtp.return_value directly, not .__enter__.return_value
+        mock_smtp.return_value = mock_server
+
+        # Also mock context manager just in case, though it shouldn't be used now
         mock_smtp.return_value.__enter__.return_value = mock_server
 
         data = {
