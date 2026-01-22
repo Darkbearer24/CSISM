@@ -27,9 +27,11 @@ def sanitize_text(value: str, max_len: int = 200) -> str:
     if not isinstance(value, str):
         return ""
     v = value.strip()
+    # Optimized: Truncate before processing to avoid unnecessary work
+    v = v[:max_len]
     # Optimized: Use regex to remove control characters
     v = CONTROL_CHARS_RE.sub('', v)
-    return v[:max_len]
+    return v
 
 def validate(payload: dict):
     name = sanitize_text(payload.get("name", ""))

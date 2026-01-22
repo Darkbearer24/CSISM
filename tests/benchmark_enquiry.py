@@ -21,9 +21,15 @@ def benchmark():
         "inquiryType": "general"
     }
 
+    # Reset global state
+    import api.enquiry
+    api.enquiry._smtp_client = None
+
     # Scenario 1: Fast SMTP (simulated 0.1s delay)
     with patch("smtplib.SMTP") as mock_smtp:
         mock_server = MagicMock()
+        # Fix: Mock the instance, not context manager return
+        mock_smtp.return_value = mock_server
         mock_smtp.return_value.__enter__.return_value = mock_server
 
         # Simulate network delay in send_message
@@ -38,9 +44,14 @@ def benchmark():
 
         print(f"Scenario 1 (Fast SMTP 0.1s): {end_time - start_time:.4f} seconds")
 
+    # Reset global state again for next scenario
+    api.enquiry._smtp_client = None
+
     # Scenario 2: Slow SMTP (simulated 2.0s delay)
     with patch("smtplib.SMTP") as mock_smtp:
         mock_server = MagicMock()
+        # Fix: Mock the instance, not context manager return
+        mock_smtp.return_value = mock_server
         mock_smtp.return_value.__enter__.return_value = mock_server
 
         def delayed_send(*args, **kwargs):

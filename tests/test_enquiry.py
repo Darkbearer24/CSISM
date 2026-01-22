@@ -5,12 +5,27 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import api.enquiry
-from api.enquiry import send_email, validate
+from api.enquiry import send_email, validate, sanitize_text
 
 class TestEnquiry(unittest.TestCase):
     def setUp(self):
         # Reset global SMTP client before each test
         api.enquiry._smtp_client = None
+
+    def test_sanitize_text(self):
+        # Normal
+        self.assertEqual(sanitize_text("Hello", 10), "Hello")
+
+        # Control chars removed
+        self.assertEqual(sanitize_text("He\x00llo", 10), "Hello")
+
+        # Truncation before filtering behavior
+        # Input: "A" + 10 control chars + "B", max_len=2
+        # Truncate(2) -> "A\x00", Filter -> "A"
+        self.assertEqual(sanitize_text("A" + "\x00" * 10 + "B", 2), "A")
+
+        # Long string truncation
+        self.assertEqual(sanitize_text("A" * 10, 5), "AAAAA")
 
     def test_validate(self):
         # Valid
