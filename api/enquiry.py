@@ -20,6 +20,9 @@ ALLOWED_INQUIRY_TYPES = {
 # Matches control characters (0-31) EXCEPT \t (9), \n (10), \r (13)
 CONTROL_CHARS_RE = re.compile(r'[\x00-\x08\x0B\x0C\x0E-\x1F]')
 
+# Global SMTP client for connection reuse in serverless environment
+_smtp_client = None
+
 def sanitize_text(value: str, max_len: int = 200) -> str:
     if not isinstance(value, str):
         return ""
@@ -46,12 +49,34 @@ def validate(payload: dict):
         "inquiryType": inquiry,
     }
 
-def send_email(data: dict):
+def get_smtp_client(timeout=10):
+    global _smtp_client
+
+    # Try to reuse existing connection
+    if _smtp_client:
+        try:
+            status = _smtp_client.noop()[0]
+            if status == 250:
+                return _smtp_client
+        except Exception:
+            _smtp_client = None
+
+    # Create new connection
     smtp_server = os.getenv("SMTP_SERVER", "smtpout.secureserver.net")
     smtp_port = int(os.getenv("SMTP_PORT", "587"))
     smtp_user = os.getenv("SMTP_USERNAME", "")
     smtp_pass = os.getenv("SMTP_PASSWORD", "")
-    sender = os.getenv("SENDER_EMAIL", smtp_user or "noreply@example.com")
+
+    server = smtplib.SMTP(smtp_server, smtp_port, timeout=timeout)
+    server.starttls()
+    if smtp_user and smtp_pass:
+        server.login(smtp_user, smtp_pass)
+
+    _smtp_client = server
+    return _smtp_client
+
+def send_email(data: dict):
+    sender = os.getenv("SENDER_EMAIL", os.getenv("SMTP_USERNAME", "") or "noreply@example.com")
     receiver = os.getenv("RECEIVER_EMAIL", sender)
     # Default timeout to 10 seconds to prevent hanging
     try:
@@ -78,11 +103,25 @@ def send_email(data: dict):
     msg["Subject"] = subject
     msg.set_content(body)
 
-    with smtplib.SMTP(smtp_server, smtp_port, timeout=timeout) as server:
-        server.starttls()
-        if smtp_user and smtp_pass:
-            server.login(smtp_user, smtp_pass)
-        server.send_message(msg)
+    # Retry logic for connection reuse
+    for attempt in range(2):
+        try:
+            server = get_smtp_client(timeout=timeout)
+            server.send_message(msg)
+            return
+        except Exception:
+            # Force reset of connection on failure
+            global _smtp_client
+            try:
+                if _smtp_client:
+                    _smtp_client.quit()
+            except Exception:
+                pass
+            _smtp_client = None
+
+            # If this was the last attempt, re-raise
+            if attempt == 1:
+                raise
 
 def json_response(handler: BaseHTTPRequestHandler, status: int, payload: dict):
     data = json.dumps(payload).encode("utf-8")

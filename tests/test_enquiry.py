@@ -4,9 +4,14 @@ import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import api.enquiry
 from api.enquiry import send_email, validate
 
 class TestEnquiry(unittest.TestCase):
+    def setUp(self):
+        # Reset global SMTP client before each test
+        api.enquiry._smtp_client = None
+
     def test_validate(self):
         # Valid
         ok, res = validate({"name": "John", "email": "john@example.com"})
@@ -20,7 +25,7 @@ class TestEnquiry(unittest.TestCase):
     @patch("smtplib.SMTP")
     def test_send_email(self, mock_smtp):
         mock_server = MagicMock()
-        mock_smtp.return_value.__enter__.return_value = mock_server
+        mock_smtp.return_value = mock_server
 
         data = {
             "name": "John Doe",
