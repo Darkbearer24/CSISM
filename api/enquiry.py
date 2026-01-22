@@ -57,7 +57,17 @@ def send_email(data: dict):
     smtp_port = int(os.getenv("SMTP_PORT", "587"))
     smtp_user = os.getenv("SMTP_USERNAME", "")
     smtp_pass = os.getenv("SMTP_PASSWORD", "")
-    sender = os.getenv("SENDER_EMAIL", smtp_user or "noreply@example.com")
+
+    server = smtplib.SMTP(smtp_server, smtp_port, timeout=timeout)
+    server.starttls()
+    if smtp_user and smtp_pass:
+        server.login(smtp_user, smtp_pass)
+
+    _smtp_client = server
+    return _smtp_client
+
+def send_email(data: dict):
+    sender = os.getenv("SENDER_EMAIL", os.getenv("SMTP_USERNAME", "") or "noreply@example.com")
     receiver = os.getenv("RECEIVER_EMAIL", sender)
     # Default timeout to 10 seconds to prevent hanging
     try:
