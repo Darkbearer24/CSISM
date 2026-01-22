@@ -1,0 +1,37 @@
+<!--
+  Hero Component (Frame 46 Refactor)
+  - Matches Figma/SCSS specs: Inset rounded image, blurred white ellipse overlay.
+  - Mobile-first responsive implementation.
+-->
+<section class="hero" aria-labelledby="hero-title">
+  <!-- The main container/card -->
+  <div class="hero__card">
+    <!-- Background Image -->
+    <img class="hero__bg-image" src="/static/images/hero-bg-new.png" alt="CSISM College Building" aria-hidden="true" />
+    
+    <!-- Blurred Ellipse Overlay -->
+    <div class="hero__blur-overlay" aria-hidden="true"></div>
+    
+    <!-- Content Wrapper -->
+    <div class="hero__content">
+      <div class="hero__text-wrapper">
+        <h1 id="hero-title" class="hero__title">
+          <span class="hero__title-text">One stop</span>
+          <span class="hero__title-highlight">solution</span>
+          <span class="hero__title-text"> for </span>
+          <br class="hero__break-desktop" />
+          <span class="hero__title-strong">Ayush Medical colleges</span>
+        </h1>
+        <p class="hero__subtitle">
+          india's first legal consultancy service for ayush colleges
+        </p>
+      </div>
+      
+      <div class="hero__cta-wrapper">
+        <a class="hero__cta" href="#contact" aria-label="Request enquiry" onclick="scrollToContact()">
+          Request enquiry
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

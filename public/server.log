@@ -1,0 +1,24 @@
+127.0.0.1 - - [21/Jan/2026 23:41:20] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jan/2026 23:41:20] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:41:20] "GET /static/css/style.css HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:41:20] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:41:20] "GET /static/images/hero-bg-new.png HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:41:20] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:41:20] "GET /static/images/logo-new.png HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:41:20] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:41:20] "GET /static/images/services-bg-overlay.png HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:41:20] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:41:20] "GET /static/images/about-bg-overlay-new.png HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:41:20] "GET /static/js/app.js HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jan/2026 23:45:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Jan/2026 23:45:36] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:45:36] "GET /static/images/logo-new.png HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:45:36] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:45:36] "GET /static/images/hero-bg-new.png HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:45:36] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:45:36] "GET /static/css/style.css HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:45:36] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:45:36] "GET /static/images/about-bg-overlay-new.png HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:45:36] code 404, message File not found
+127.0.0.1 - - [21/Jan/2026 23:45:36] "GET /static/images/services-bg-overlay.png HTTP/1.1" 404 -
+127.0.0.1 - - [21/Jan/2026 23:45:36] "GET /static/js/app.js HTTP/1.1" 200 -

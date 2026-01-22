@@ -1,29 +1,33 @@
-from playwright.sync_api import sync_playwright, expect
+from playwright.sync_api import sync_playwright
+import os
 
-def run():
+def verify_js_extraction():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
+        page.goto("http://localhost:8000")
 
-        # Navigate to the local server
-        page.goto("http://localhost:5173", timeout=60000)
+        # Check if the script tag is present
+        script = page.locator('script[src="static/js/app.js"]')
+        if script.count() > 0:
+            print("Script tag found!")
+        else:
+            print("Script tag NOT found!")
+            exit(1)
 
-        # Wait for the React app to mount and render the Hero section
-        # We look for the h1 in the hero section
-        hero_heading = page.locator(".hero h1")
-        expect(hero_heading).to_be_visible(timeout=10000)
+        # Check if the form exists
+        form = page.locator("#enquiryForm")
+        if form.count() > 0:
+            print("Form found!")
+        else:
+            print("Form NOT found!")
+            exit(1)
 
-        # Verify content matches expectations
-        expect(page.get_by_text("Professional Guidance for ISM College Establishment")).to_be_visible()
-
-        # Scroll down to ensure all lazy loaded content (if any) or just to show the page in screenshot
-        # We'll take a full page screenshot
-
-        # Take screenshot
-        page.screenshot(path="verification/landing_page.png", full_page=True)
-
-        print("Verification successful, screenshot saved.")
+        # Ensure directory exists
+        os.makedirs("verification", exist_ok=True)
+        page.screenshot(path="verification/frontend_verification.png")
+        print("Screenshot taken.")
         browser.close()
 
 if __name__ == "__main__":
-    run()
+    verify_js_extraction()
