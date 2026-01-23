@@ -69,5 +69,28 @@ class TestEnquiry(unittest.TestCase):
         self.assertIn("John Doe", msg.get_content())
         self.assertEqual(msg["Subject"], "New ISM College Enquiry – CSISM Website")
 
+    @patch("smtplib.SMTP")
+    def test_send_email_reuses_connection(self, mock_smtp):
+        mock_server = MagicMock()
+        mock_smtp.return_value = mock_server
+
+        data = {
+            "name": "Jane Doe",
+            "email": "jane@example.com",
+            "phone": "555-0199",
+            "collegeName": "My College",
+            "inquiryType": "general"
+        }
+
+        # First call: should initialize SMTP
+        send_email(data)
+        self.assertEqual(mock_smtp.call_count, 1)
+        self.assertEqual(mock_server.send_message.call_count, 1)
+
+        # Second call: should reuse existing SMTP (no new init)
+        send_email(data)
+        self.assertEqual(mock_smtp.call_count, 1)
+        self.assertEqual(mock_server.send_message.call_count, 2)
+
 if __name__ == '__main__':
     unittest.main()
