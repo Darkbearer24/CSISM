@@ -37,6 +37,11 @@ class TestEnquiry(unittest.TestCase):
         import api.enquiry
         api.enquiry._smtp_client = None
 
+    def tearDown(self):
+        # Clean up global state after each test
+        import api.enquiry
+        api.enquiry._smtp_client = None
+
     @patch("smtplib.SMTP")
     def test_send_email(self, mock_smtp):
         mock_server = MagicMock()
@@ -68,6 +73,39 @@ class TestEnquiry(unittest.TestCase):
         msg = mock_server.send_message.call_args[0][0]
         self.assertIn("John Doe", msg.get_content())
         self.assertEqual(msg["Subject"], "New ISM College Enquiry – CSISM Website")
+
+    @patch("smtplib.SMTP")
+    def test_send_email_retry(self, mock_smtp):
+        mock_server = MagicMock()
+        mock_smtp.return_value = mock_server
+
+        # First call fails, second call succeeds
+        mock_server.send_message.side_effect = [Exception("Connection lost"), None]
+
+        data = {
+            "name": "Jane Doe",
+            "email": "jane@example.com",
+            "phone": "555-0199",
+            "collegeName": "Another College",
+            "inquiryType": "general"
+        }
+
+        # We need to set _smtp_client to mock_server initially to trigger the retry logic
+        # OR just let it connect normally first time?
+        # send_email logic:
+        # if _smtp_client is None: connect() -> gets mock_server
+        # try: _smtp_client.send_message (fails) -> catch
+        # try: connect() -> gets NEW mock_server instance? No, mock_smtp returns same mock_server unless side_effect is set on class.
+
+        # If mock_smtp is called twice, it returns mock_server both times.
+
+        send_email(data)
+
+        # Should have called connect twice (once initial, once retry)
+        self.assertEqual(mock_smtp.call_count, 2)
+
+        # Should have called send_message twice
+        self.assertEqual(mock_server.send_message.call_count, 2)
 
 if __name__ == '__main__':
     unittest.main()
