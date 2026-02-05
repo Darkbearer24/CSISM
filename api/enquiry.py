@@ -53,23 +53,15 @@ def validate(payload: dict):
 
 def send_email(data: dict):
     global _smtp_client
+
+    # Environment variables
     smtp_server = os.getenv("SMTP_SERVER", "smtpout.secureserver.net")
     smtp_port = int(os.getenv("SMTP_PORT", "587"))
     smtp_user = os.getenv("SMTP_USERNAME", "")
     smtp_pass = os.getenv("SMTP_PASSWORD", "")
-
-    server = smtplib.SMTP(smtp_server, smtp_port, timeout=timeout)
-    server.starttls()
-    if smtp_user and smtp_pass:
-        server.login(smtp_user, smtp_pass)
-
-    _smtp_client = server
-    return _smtp_client
-
-def send_email(data: dict):
-    sender = os.getenv("SENDER_EMAIL", os.getenv("SMTP_USERNAME", "") or "noreply@example.com")
+    sender = os.getenv("SENDER_EMAIL", smtp_user or "noreply@example.com")
     receiver = os.getenv("RECEIVER_EMAIL", sender)
-    # Default timeout to 10 seconds to prevent hanging
+
     try:
         timeout = int(os.getenv("SMTP_TIMEOUT", "10"))
     except (ValueError, TypeError):
