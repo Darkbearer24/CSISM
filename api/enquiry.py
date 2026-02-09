@@ -64,16 +64,21 @@ def validate(payload: dict):
         "inquiryType": inquiry,
     }
 
-def connect_smtp():
-    """Helper to establish SMTP connection using global config."""
-    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=SMTP_TIMEOUT)
-    server.starttls()
-    if SMTP_USERNAME and SMTP_PASSWORD:
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
-    return server
-
 def send_email(data: dict):
     global _smtp_client
+    sender = os.getenv("SENDER_EMAIL", os.getenv("SMTP_USERNAME", "") or "noreply@example.com")
+    receiver = os.getenv("RECEIVER_EMAIL", sender)
+
+    smtp_server = os.getenv("SMTP_SERVER", "smtpout.secureserver.net")
+    smtp_port = int(os.getenv("SMTP_PORT", "587"))
+    smtp_user = os.getenv("SMTP_USERNAME", "")
+    smtp_pass = os.getenv("SMTP_PASSWORD", "")
+
+    # Default timeout to 10 seconds to prevent hanging
+    try:
+        timeout = int(os.getenv("SMTP_TIMEOUT", "10"))
+    except (ValueError, TypeError):
+        timeout = 10
 
     subject = "New ISM College Enquiry – CSISM Website"
     body = "\n".join([
