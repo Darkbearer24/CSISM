@@ -36,6 +36,14 @@ except (ValueError, TypeError):
 # Global SMTP client to reuse connections across warm invocations
 _smtp_client = None
 
+def connect_smtp():
+    """Helper to create a new SMTP connection using module configuration."""
+    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=SMTP_TIMEOUT)
+    server.starttls()
+    if SMTP_USERNAME and SMTP_PASSWORD:
+        server.login(SMTP_USERNAME, SMTP_PASSWORD)
+    return server
+
 def sanitize_text(value: str, max_len: int = 200) -> str:
     if not isinstance(value, str):
         return ""
