@@ -20,23 +20,29 @@ ALLOWED_INQUIRY_TYPES = {
 # Matches control characters (0-31) EXCEPT \t (9), \n (10), \r (13)
 CONTROL_CHARS_RE = re.compile(r'[\x00-\x08\x0B\x0C\x0E-\x1F]')
 
-# Module-level configuration for cold start optimization
+# Global SMTP Configuration (loaded once per cold start)
 SMTP_SERVER = os.getenv("SMTP_SERVER", "smtpout.secureserver.net")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
-# Default timeout to 10 seconds to prevent hanging
+SENDER_EMAIL = os.getenv("SENDER_EMAIL", SMTP_USERNAME or "noreply@example.com")
+RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL", SENDER_EMAIL)
+
 try:
     SMTP_TIMEOUT = int(os.getenv("SMTP_TIMEOUT", "10"))
 except (ValueError, TypeError):
     SMTP_TIMEOUT = 10
 
-SENDER_EMAIL = os.getenv("SENDER_EMAIL", SMTP_USERNAME or "noreply@example.com")
-RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL", SENDER_EMAIL)
-
-
 # Global SMTP client to reuse connections across warm invocations
 _smtp_client = None
+
+def connect_smtp():
+    """Helper to create a new SMTP connection using module configuration."""
+    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=SMTP_TIMEOUT)
+    server.starttls()
+    if SMTP_USERNAME and SMTP_PASSWORD:
+        server.login(SMTP_USERNAME, SMTP_PASSWORD)
+    return server
 
 def sanitize_text(value: str, max_len: int = 200) -> str:
     if not isinstance(value, str):
@@ -68,6 +74,19 @@ def validate(payload: dict):
 
 def send_email(data: dict):
     global _smtp_client
+    sender = os.getenv("SENDER_EMAIL", os.getenv("SMTP_USERNAME", "") or "noreply@example.com")
+    receiver = os.getenv("RECEIVER_EMAIL", sender)
+
+    smtp_server = os.getenv("SMTP_SERVER", "smtpout.secureserver.net")
+    smtp_port = int(os.getenv("SMTP_PORT", "587"))
+    smtp_user = os.getenv("SMTP_USERNAME", "")
+    smtp_pass = os.getenv("SMTP_PASSWORD", "")
+
+    # Default timeout to 10 seconds to prevent hanging
+    try:
+        timeout = int(os.getenv("SMTP_TIMEOUT", "10"))
+    except (ValueError, TypeError):
+        timeout = 10
 
     subject = "New ISM College Enquiry – CSISM Website"
     body = "\n".join([
@@ -88,14 +107,6 @@ def send_email(data: dict):
     msg["Subject"] = subject
     msg.set_content(body)
 
-    # Optimization: Reuse SMTP connection if available
-    def connect_smtp():
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=SMTP_TIMEOUT)
-        server.starttls()
-        if SMTP_USERNAME and SMTP_PASSWORD:
-            server.login(SMTP_USERNAME, SMTP_PASSWORD)
-        return server
-
     if _smtp_client is None:
         _smtp_client = connect_smtp()
 
@@ -103,8 +114,14 @@ def send_email(data: dict):
         _smtp_client.send_message(msg)
     except Exception:
         # If connection died, reconnect and retry once
-        _smtp_client = connect_smtp()
-        _smtp_client.send_message(msg)
+        try:
+            _smtp_client = connect_smtp()
+            _smtp_client.send_message(msg)
+        except Exception:
+            # If it fails again, we let the exception propagate so the handler returns 502
+            # Also reset client to None so next request tries a fresh connection
+            _smtp_client = None
+            raise
 
 def json_response(handler: BaseHTTPRequestHandler, status: int, payload: dict):
     data = json.dumps(payload).encode("utf-8")
