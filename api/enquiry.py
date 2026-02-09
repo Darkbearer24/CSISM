@@ -108,7 +108,12 @@ def send_email(data: dict):
     msg.set_content(body)
 
     if _smtp_client is None:
-        _smtp_client = connect_smtp()
+        try:
+            _smtp_client = connect_smtp()
+        except Exception:
+            # If initial connection fails, we can't send.
+            # Reraise so the handler knows.
+            raise
 
     try:
         _smtp_client.send_message(msg)
