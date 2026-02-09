@@ -20,6 +20,19 @@ ALLOWED_INQUIRY_TYPES = {
 # Matches control characters (0-31) EXCEPT \t (9), \n (10), \r (13)
 CONTROL_CHARS_RE = re.compile(r'[\x00-\x08\x0B\x0C\x0E-\x1F]')
 
+# Global SMTP Configuration (loaded once per cold start)
+SMTP_SERVER = os.getenv("SMTP_SERVER", "smtpout.secureserver.net")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
+SENDER_EMAIL = os.getenv("SENDER_EMAIL", SMTP_USERNAME or "noreply@example.com")
+RECEIVER_EMAIL = os.getenv("RECEIVER_EMAIL", SENDER_EMAIL)
+
+try:
+    SMTP_TIMEOUT = int(os.getenv("SMTP_TIMEOUT", "10"))
+except (ValueError, TypeError):
+    SMTP_TIMEOUT = 10
+
 # Global SMTP client to reuse connections across warm invocations
 _smtp_client = None
 
@@ -81,18 +94,10 @@ def send_email(data: dict):
     ])
 
     msg = EmailMessage()
-    msg["From"] = sender
-    msg["To"] = receiver
+    msg["From"] = SENDER_EMAIL
+    msg["To"] = RECEIVER_EMAIL
     msg["Subject"] = subject
     msg.set_content(body)
-
-    # Optimization: Reuse SMTP connection if available
-    def connect_smtp():
-        server = smtplib.SMTP(smtp_server, smtp_port, timeout=timeout)
-        server.starttls()
-        if smtp_user and smtp_pass:
-            server.login(smtp_user, smtp_pass)
-        return server
 
     if _smtp_client is None:
         _smtp_client = connect_smtp()
@@ -101,8 +106,14 @@ def send_email(data: dict):
         _smtp_client.send_message(msg)
     except Exception:
         # If connection died, reconnect and retry once
-        _smtp_client = connect_smtp()
-        _smtp_client.send_message(msg)
+        try:
+            _smtp_client = connect_smtp()
+            _smtp_client.send_message(msg)
+        except Exception:
+            # If it fails again, we let the exception propagate so the handler returns 502
+            # Also reset client to None so next request tries a fresh connection
+            _smtp_client = None
+            raise
 
 def json_response(handler: BaseHTTPRequestHandler, status: int, payload: dict):
     data = json.dumps(payload).encode("utf-8")
